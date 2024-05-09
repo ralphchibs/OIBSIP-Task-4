@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Basic Login Authentication System</title>
+    <style>
+        body {
+            background-color: black;
+            color: blue;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            width: 50%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: lightgray;
+            border-radius: 5px;
+            text-align: center;
+        }
+        input {
+            padding: 5px;
+            margin: 5px;
+            border-radius: 3px;
+            border: 1px solid lightgray;
+            background-color: white;
+        }
+        button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 3px;
+            background-color: blue;
+            color: white;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Basic Login Authentication System</h1>
+        <div id="loginSection">
+            <h2>User Login</h2>
+            <input type="text" id="loginUsername" placeholder="Enter username"><br>
+            <input type="password" id="loginPassword" placeholder="Enter password"><br>
+            <button onclick="loginUser()">Login</button>
+            <br><br>
+            <p>Don't have an account? <a href="#" onclick="showRegistration()">Register here</a></p>
+        </div>
+        <div id="registrationSection" style="display: none;">
+            <h2>User Registration</h2>
+            <input type="text" id="regUsername" placeholder="Enter username"><br>
+            <input type="password" id="regPassword" placeholder="Enter password"><br>
+            <button onclick="registerUser()">Register</button>
+            <br><br>
+            <p>Already have an account? <a href="#" onclick="showLogin()">Login here</a></p>
+        </div>
+        <div id="message"></div>
+    </div>
+
+    <div id="secureArea" style="display: none; background-color: blue; text-align: center; padding: 50px;">
+        <h1 style="color: white; font-size: 24px; font-weight: bold;">Welcome to the Secure Area!</h1>
+    </div>
+
+    <script>
+        // Simple data structure to store user information
+        const users = {};
+
+        function showRegistration() {
+            document.getElementById("loginSection").style.display = "none";
+            document.getElementById("registrationSection").style.display = "block";
+        }
+
+        function showLogin() {
+            document.getElementById("registrationSection").style.display = "none";
+            document.getElementById("loginSection").style.display = "block";
+        }
+
+        function registerUser() {
+            const username = document.getElementById("regUsername").value;
+            const password = document.getElementById("regPassword").value;
+
+            if (users[username]) {
+                document.getElementById("message").innerText = "Username already registered. Please login or choose a different username.";
+            } else {
+                // Hash and salt the password before storing it
+                const hashedPassword = password; // You can use cryptographic libraries here
+
+                users[username] = hashedPassword;
+                document.getElementById("message").innerText = "User registered successfully!";
+                showLogin();
+            }
+        }
+
+        function loginUser() {
+            const username = document.getElementById("loginUsername").value;
+            const password = document.getElementById("loginPassword").value;
+
+            const hashedPassword = users[username];
+
+            if (hashedPassword && hashedPassword === password) {
+                document.getElementById("message").innerText = "Login successful! You have access to the secure area.";
+                document.getElementById("loginSection").style.display = "none";
+                document.getElementById("secureArea").style.display = "block";
+            } else {
+                document.getElementById("message").innerText = "Invalid username or password. Please register if you don't have an account.";
+                showRegistration();
+            }
+        }
+    </script>
+</body>
+</html>
